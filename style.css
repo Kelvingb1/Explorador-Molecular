@@ -1,0 +1,202 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    color-scheme: dark;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background:
+        radial-gradient(ellipse at top, #142341, transparent 65%),
+        #070b14;
+    color: #e8eef8;
+}
+
+header {
+    padding: 32px 24px;
+    border-bottom: 1px solid #263550;
+    background: #0b1220;
+}
+
+header h1 {
+    max-width: 1400px;
+    margin: 0 auto 8px;
+    font-size: clamp(26px, 4vw, 38px);
+    letter-spacing: -1px;
+}
+
+header p {
+    max-width: 1400px;
+    margin: auto;
+    color: #aabbd3;
+}
+
+main {
+    max-width: 1448px;
+    margin: 28px auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: minmax(0, 2.5fr) minmax(280px, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+section {
+    min-width: 0;
+    padding: 24px;
+    background: #101929;
+    border: 1px solid #293852;
+    border-radius: 20px;
+    box-shadow: 0 16px 40px #00000030;
+}
+
+h2 {
+    margin-top: 0;
+    color: #f1f5ff;
+}
+
+p {
+    line-height: 1.65;
+    color: #b9c7dc;
+}
+
+label[for="seletor-composto"] {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #c5d5ed;
+}
+
+#seletor-composto {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 26px;
+    border: 1px solid #405577;
+    border-radius: 10px;
+    background: #0b1220;
+    color: #f1f5ff;
+    font: inherit;
+    cursor: pointer;
+}
+
+#visualizador {
+    position: relative;
+    width: 100%;
+    height: clamp(360px, 58vh, 620px);
+    margin-top: 22px;
+    overflow: hidden;
+    border: 1px solid #354766;
+    border-radius: 16px;
+
+    /* Pontos de luz em camadas, atrás da molécula. */
+    background-color: #060c18;
+    background-image:
+        radial-gradient(
+            circle at 18px 25px,
+            #dceaff 1px,
+            transparent 1.5px
+        ),
+        radial-gradient(
+            circle at 70px 90px,
+            #829ecb 0.8px,
+            transparent 1.4px
+        ),
+        radial-gradient(
+            ellipse at 50% 45%,
+            #193653 0%,
+            transparent 70%
+        );
+    background-size:
+        137px 163px,
+        211px 193px,
+        100% 100%;
+}
+
+#visualizador p {
+    padding: 24px;
+    text-align: center;
+}
+
+dt {
+    margin-top: 24px;
+    font-weight: 600;
+    color: #9cb1ce;
+}
+
+dd {
+    margin: 8px 0 0;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #293852;
+    font-size: 20px;
+    color: #f1f5ff;
+    overflow-wrap: anywhere;
+}
+
+.legenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.item-legenda {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 11px;
+    background: #0b1220;
+    border: 1px solid #293852;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.cor-legenda {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid #b9c7dc;
+}
+
+button {
+    margin: 10px 10px 0 0;
+    padding: 12px 18px;
+    border: 1px solid #486998;
+    border-radius: 10px;
+    background: #193458;
+    color: #f1f5ff;
+    font: inherit;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background: #284f80;
+}
+
+button:focus-visible,
+#seletor-composto:focus-visible {
+    outline: 3px solid #8bcaff;
+    outline-offset: 3px;
+}
+
+@media (max-width: 850px) {
+    main {
+        grid-template-columns: 1fr;
+        padding: 0 14px;
+    }
+
+    section {
+        padding: 18px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    button {
+        transition: none;
+    }
+}

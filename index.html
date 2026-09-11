@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Explorador Molecular</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Explorador Molecular</h1>
+        <p>Explore estruturas químicas em três dimensões.</p>
+    </header>
+
+    <main>
+        <section aria-labelledby="titulo-molecula">
+            <label for="seletor-composto">Escolha um composto:</label>
+
+<select id="seletor-composto">
+    <option value="CaOH2">Hidróxido de Cálcio — Ca(OH)₂</option>
+    <option value="NH4Cl">Cloreto de Amônio — NH₄Cl</option>
+    <option value="NH4OH">Hidróxido de Amônio — solução aquosa</option>
+    <option value="NaOH">Hidróxido de Sódio — NaOH</option>
+    <option value="KCl">Cloreto de Potássio — KCl</option>
+    <option value="NaCl">Cloreto de Sódio — NaCl</option>
+    <option value="HClO4">Ácido Perclórico — HClO₄</option>
+    <option value="HNO3">Ácido Nítrico — HNO₃</option>
+    <option value="H2SO4">Ácido Sulfúrico — H₂SO₄</option>
+    <option value="H2CO3">Ácido Carbônico — H₂CO₃</option>
+    <option value="H3BO3">Ácido Bórico — H₃BO₃</option>
+    <option value="NH3">Amônia — NH₃</option>
+    <option value="HCl">Ácido Clorídrico — HCl</option>
+    <option value="HF">Ácido Fluorídrico — HF</option>
+    <option value="HBr">Ácido Bromídrico — HBr</option>
+    <option value="HI">Ácido Iodídrico — HI</option>
+    <option value="HClO">Ácido Hipocloroso — HClO</option>
+</select>
+            <h2 id="titulo-molecula">Amônia — NH₃</h2>
+
+            <p>
+                Uma molécula formada por um átomo de nitrogênio
+                e três átomos de hidrogênio.
+            </p>
+
+            <div id="visualizador">
+                <p>O modelo 3D será adicionado na próxima etapa.</p>
+            </div>
+        </section>
+
+        <section aria-labelledby="titulo-informacoes">
+            <h2 id="titulo-informacoes">Informações do composto</h2>
+
+            <dl>
+                <dt>Fórmula molecular</dt>
+                <dd>NH₃</dd>
+
+                <dt>Geometria molecular</dt>
+                <dd>Piramidal trigonal</dd>
+
+                <dt>Total de átomos</dt>
+                <dd>4</dd>
+            </dl>
+        </section>
+    </main>
+
+    <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+<script src="script.js"></script>
+<script src="complemento.js"></script>
+</body>
+</html>
