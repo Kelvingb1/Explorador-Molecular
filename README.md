@@ -6,6 +6,8 @@ Projeto de portfólio de **Kelvin Gonçalves Bruno**, estudante de Engenharia Qu
 
 O site é público e pode ser acessado sem conta no ChatGPT. O relatório Power BI contém um botão que abre o explorador com o composto selecionado.
 
+![Demonstração do Explorador Molecular](assets/demo.gif)
+
 ## O que o projeto demonstra
 
 - Registro de análises e referências de pH no Excel, com fórmulas e imagens de compostos.
