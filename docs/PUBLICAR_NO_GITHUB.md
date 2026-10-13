@@ -1,9 +1,19 @@
-# Publicar o pacote no GitHub
+# Atualizar o projeto no GitHub
 
-1. Extraia o ZIP e abra a pasta `ExploradorMolecular_CFA`.
-2. No repositório GitHub escolhido, envie o conteúdo dessa pasta para a raiz, incluindo o README e as pastas `excel`, `powerbi` e `sql`. Se o repositório já contém uma versão anterior, revise os arquivos substituídos e retire documentos antigos da distribuição que possam confundir quem baixar.
-3. Inclua uma captura real do dashboard no README quando tiver a imagem disponível.
-4. Teste os links relativos do README e o link público do explorador.
-5. No currículo, coloque o endereço do seu repositório; no README, o visitante poderá baixar os arquivos e abrir o site.
+O projeto está publicado no [repositório Explorador-Molecular](https://github.com/Kelvingb1/Explorador-Molecular). O explorador online é público. Este guia é para manutenção do repositório pelo autor.
 
-O pacote está preparado para publicação, mas não foi enviado ao seu GitHub nesta etapa. O explorador online já está público. Seu banco SQL local não é publicado pelo upload destes arquivos.
+1. Abra a pasta clonada do repositório e atualize os arquivos desejados.
+2. Ao substituir um arquivo, coloque a nova versão na pasta antes de preparar o commit. Confirme o nome exato, especialmente `README.md`.
+3. Use `git status` e `git diff` para conferir as alterações. Para Excel e Power BI, confirme os arquivos no aplicativo correspondente.
+4. Adicione somente os arquivos que pretende atualizar, crie o commit e envie com `git push`.
+5. Confira a nova execução na aba Actions, os links do README, o GIF e os diagramas Mermaid.
+
+Exemplo para uma alteração no README:
+
+```bash
+git add README.md
+git commit -m "Atualiza documentacao do projeto"
+git push
+```
+
+O upload dos arquivos do projeto não publica sua instância local do SQL Server. Mudanças no código do explorador enviadas ao GitHub também precisam ser publicadas na hospedagem do site para aparecerem no endereço online.

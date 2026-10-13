@@ -68,20 +68,8 @@ O [SQL enviado pelo autor](sql/consultas/SQLQuery1Lab.sql) é uma consulta auxil
 | `vba/` | Código das macros; cópias importáveis em `windows-1252/`. |
 | `data/compounds.json` | Catálogo canônico dos 17 compostos. |
 | `assets/images/` | JPEGs originais usados na importação. |
-| `index.html`, `style.css`, `*.js` | Fonte do explorador para execução local. |
+| `index.html`, `style.css`, `*.js` | Código HTML, CSS e JavaScript do explorador. |
 | `docs/` | Instalação, arquitetura, contrato de importação e verificação. |
-
-## Executar o explorador localmente
-
-Opcional para desenvolvimento. Na raiz do projeto, com Node.js 20 ou superior:
-
-```sh
-npm run check
-npm test
-npm run serve
-```
-
-Abra `http://localhost:5500/index.html`. O endereço público já configurado no relatório funciona independentemente desse servidor local.
 
 ## Validação e limites
 
@@ -91,7 +79,7 @@ Os dados são **simulados para fins educacionais**. As estruturas têm coordenad
 
 ## Como as referências de pH entram no projeto
 
-Os valores de pH teórico foram calculados previamente, com apoio de IA, e cadastrados na aba `ReferênciaPH` do Excel. As equações abaixo documentam a origem desses valores; o explorador não executa esses cálculos. O Excel busca a referência cadastrada e calcula a diferença em relação ao pH simulado quando os dois valores são numéricos e a referência é aplicável.
+Os valores de pH teórico foram calculados previamente, com apoio de IA, e cadastrados na aba `ReferênciaPH` do Excel. As [equações e hipóteses de cálculo](docs/CHEMISTRY_ASSUMPTIONS.md) documentam a origem desses valores; o explorador não executa esses cálculos. O Excel busca a referência cadastrada e calcula a diferença em relação ao pH simulado quando os dois valores são numéricos e a referência é aplicável.
 
 O diagrama representa o processo de definição e uso da referência, não uma rotina que escolhe automaticamente o modelo químico:
 
@@ -113,5 +101,3 @@ flowchart TB
 **Kelvin Gonçalves Bruno** — Engenharia Química. Projeto pessoal de integração entre química e análise de dados. IA foi usada como apoio na implementação e revisão. A visualização 3D utiliza a biblioteca [3Dmol](https://3dmol.org/).
 
 A licença do projeto ainda depende de escolha do autor; as dependências mantêm suas próprias licenças.
-
-Para disponibilizar os arquivos no seu portfólio, siga [Publicar no GitHub](docs/PUBLICAR_NO_GITHUB.md).
