@@ -1,0 +1,18 @@
+﻿DataAnalise,IDAnalise,Lote,IDComposto,Nomenclatura,IDReferencia,Concentracao,Temperatura,PHMedido,ReferenciaAplicavel,PHTeorico,DiferencaPH,Status
+2026-10-01,1,DEMO-SIMULADO,1,Ácido Clorídrico,1,0.1,25,1,Sim,1,0,Igual ao teorico
+2026-10-01,2,DEMO-SIMULADO,2,Ácido Sulfúrico,2,0.1,25,0.96,Sim,0.96,0,Igual ao teorico
+2026-10-01,3,DEMO-SIMULADO,3,Hidróxido de Sódio,3,0.1,25,13,Sim,13,0,Igual ao teorico
+2026-10-01,4,DEMO-SIMULADO,4,Ácido Nítrico,4,0.1,25,1,Sim,1,0,Igual ao teorico
+2026-10-01,5,DEMO-SIMULADO,5,Amônia,5,0.1,25,11.12,Sim,11.12,0,Igual ao teorico
+2026-10-01,6,DEMO-SIMULADO,6,Hidróxido de Amônio — amônia aquosa,6,0.1,25,11.12,Sim,11.12,0,Igual ao teorico
+2026-10-01,7,DEMO-SIMULADO,7,Cloreto de Sódio,7,0.1,25,7,Sim,7,0,Igual ao teorico
+2026-10-01,8,DEMO-SIMULADO,8,Cloreto de Potássio,8,0.1,25,7,Sim,7,0,Igual ao teorico
+2026-10-01,9,DEMO-SIMULADO,9,Hidróxido de Cálcio,9,0.1,25,,Nao,,,Nao aplicavel
+2026-10-01,10,DEMO-SIMULADO,10,Cloreto de Amônio,10,0.1,25,5.13,Sim,5.13,0,Igual ao teorico
+2026-10-01,11,DEMO-SIMULADO,11,Ácido Bromídrico,11,0.1,25,1,Sim,1,0,Igual ao teorico
+2026-10-01,12,DEMO-SIMULADO,12,Ácido Iodídrico,12,0.1,25,1,Sim,1,0,Igual ao teorico
+2026-10-01,13,DEMO-SIMULADO,13,Ácido Fluorídrico,13,0.1,25,2.11,Sim,2.11,0,Igual ao teorico
+2026-10-01,14,DEMO-SIMULADO,14,Ácido Perclórico,14,0.1,25,1,Sim,1,0,Igual ao teorico
+2026-10-01,15,DEMO-SIMULADO,15,Ácido Carbônico,15,0.1,25,,Nao,,,Nao aplicavel
+2026-10-01,16,DEMO-SIMULADO,16,Ácido Bórico,16,0.1,25,5.13,Sim,5.13,0,Igual ao teorico
+2026-10-01,17,DEMO-SIMULADO,17,Ácido Hipocloroso,17,0.1,25,4.27,Sim,4.27,0,Igual ao teorico

@@ -1,0 +1,27 @@
+name: Validar Explorador Molecular
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  catalog-and-controller:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm run check
+      - run: npm test
+      - run: node --check script.js && node --check complemento.js && node --check catalog.js
+      - run: python3 tools/export-vba.py
+      - run: git diff --exit-code -- vba/windows-1252
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --ignore-scripts playwright@1.62.1
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser

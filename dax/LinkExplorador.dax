@@ -1,61 +1,12 @@
-// ============================================================
-// Explorador Molecular / Laboratório — Power BI
-// Medida DAX usada no botão "Explorar em 3D" do relatório.
-// Copiada da barra de fórmulas do Power BI Desktop.
-// Não é executável fora do Power BI — este arquivo é só
-// documentação/versionamento do texto da medida.
-// ============================================================
-
+// ConfigExplorador: tabela de uma linha com coluna WebBaseURL (sem query/fragmento).
+// Importe CodigoExplorador de excel.Compostos. Não manter SWITCH por ID.
 LinkExplorador =
-
-// 1. Pega o composto selecionado na segmentação do relatório.
-//    Se mais de um composto estiver selecionado ao mesmo tempo,
-//    SELECTEDVALUE retorna em branco -- é assim que o botão
-//    "não faz nada" quando não há uma seleção única (documentado
-//    no README).
-VAR IDSelecionado =
-    SELECTEDVALUE('excel Compostos'[IDComposto])
-
-// 2. Traduz o ID interno para o código que o explorador web
-//    espera na URL. Não é sempre a fórmula "óbvia": o hidróxido
-//    de cálcio é "CaOH2" (sem parênteses nem subscrito) e o
-//    ácido hipocloroso é "HClO" -- esses dois são os exemplos
-//    que o README já cita como armadilha.
-VAR Codigo =
-    SWITCH(
-        IDSelecionado,
-        1,  "HCl",
-        2,  "H2SO4",
-        3,  "NaOH",
-        4,  "HNO3",
-        5,  "NH3",
-        6,  "NH4OH",
-        7,  "NaCl",
-        8,  "KCl",
-        9,  "CaOH2",
-        10, "NH4Cl",
-        11, "HBr",
-        12, "HI",
-        13, "HF",
-        14, "HClO4",
-        15, "H2CO3",
-        16, "H3BO3",
-        17, "HClO",
-        BLANK()               // ID desconhecido -- não quebra, só não gera link
-    )
-
-// 3. Endereço do explorador em desenvolvimento (Live Server
-//    local). Publicar o site exigiria trocar este valor fixo
-//    pelo endereço público -- ainda não faz parte desta beta.
-VAR Endereco =
-    "http://127.0.0.1:5500/index.html"
-
-// 4. Só monta a URL se havia um composto reconhecido; caso
-//    contrário, o botão fica sem ação (BLANK() desabilita a
-//    ação de URL no botão do Power BI).
+VAR Codigo = SELECTEDVALUE('excel Compostos'[CodigoExplorador])
+VAR Ativo = SELECTEDVALUE('excel Compostos'[Ativo], FALSE())
+VAR Endereco = SELECTEDVALUE(ConfigExplorador[WebBaseURL])
 RETURN
     IF(
-        ISBLANK(Codigo),
+        ISBLANK(Codigo) || NOT(Ativo) || ISBLANK(Endereco),
         BLANK(),
         Endereco & "?composto=" & Codigo
     )

@@ -4,16 +4,16 @@ Option Explicit
 ' Excel Windows. Importar no arquivo XLSM pelo menu Arquivo > Importar arquivo.
 ' Executar ImportarImagensCompostos com Alt+F8.
 ' Aba Compostos: A=IDComposto, B=Formula, C=Nomenclatura, D=Estrutura 2D.
-' Escolher a pasta Solucoes ou a pasta com as imagens reduzidas.
-' Nomes aceitos: nomenclatura, formula ou ID. Extensoes: PNG, JPG, JPEG.
+' IMAGE_PATH na aba Config e ImagemArquivo na coluna G.
+' Arquivo exato do catalogo; nao ha aliases nem escolha manual.
 ' O desenho fica sobre a celula, incorporado ao arquivo (Shape).
 ' Ajustar a altura/largura NO EXCEL nao reduz os bytes do arquivo de imagem.
 ' Reexecutar usando a pasta reduzida para substituir as imagens desta macro.
 ' Nao apaga desenhos de outras macros. Nao altera nomes de colunas.
 
 Public Sub ImportarImagensCompostos()
-    Dim ws As Worksheet, fso As Object, pasta As Object, arquivo As Object
-    Dim seletor As Object, arquivos As Collection, ids As Object
+    Dim ws As Worksheet, fso As Object
+    Dim ids As Object, bytesImagem As Variant
     Dim ultima As Long, linha As Long, id As String, nome As String
     Dim formula As String, caminho As String, motivo As String
     Dim inseridas As Long, pendentes As Long, grandes As Long
@@ -46,21 +46,9 @@ Public Sub ImportarImagensCompostos()
     Next linha
     If ids.Count = 0 Then Err.Raise vbObjectError + 713, , "Nao ha compostos cadastrados."
 
-    Set seletor = Application.FileDialog(4) ' msoFileDialogFolderPicker
-    With seletor
-        .Title = "Selecione a pasta das imagens de solucoes"
-        .AllowMultiSelect = False
-        If .Show <> -1 Then Exit Sub
-        pastaEscolhida = .SelectedItems(1)
-    End With
+    ValidarCatalogoPlanilha ws
+    pastaEscolhida = ConfigValor("IMAGE_PATH")
     Set fso = CreateObject("Scripting.FileSystemObject")
-    Set pasta = fso.GetFolder(pastaEscolhida)
-    Set arquivos = New Collection
-    For Each arquivo In pasta.Files
-        Select Case LCase$(fso.GetExtensionName(arquivo.Name))
-            Case "png", "jpg", "jpeg": arquivos.Add arquivo
-        End Select
-    Next arquivo
 
     Application.ScreenUpdating = False
     Application.EnableEvents = False
@@ -73,7 +61,8 @@ Public Sub ImportarImagensCompostos()
             formula = CStr(ws.Cells(linha, "B").Value2)
             nome = CStr(ws.Cells(linha, "C").Value2)
             motivo = ""
-            caminho = ProcurarImagem(arquivos, fso, id, formula, nome, motivo)
+            caminho = ResolverImagemComposto(ws, linha)
+            bytesImagem = LerImagemComposto(caminho)
             If Len(caminho) > 0 Then
                 If InserirImagem(ws, linha, id, nome, caminho, motivo) Then
                     inseridas = inseridas + 1
@@ -125,7 +114,8 @@ Private Function InserirImagem(ByVal ws As Worksheet, ByVal linha As Long, _
     Set anterior = ws.Shapes(nomeShape)
     On Error GoTo Falha
     If Not anterior Is Nothing Then
-        If Left$(anterior.AlternativeText, Len("CompostoID=" & id & "|")) <> "CompostoID=" & id & "|" Then
+        If Left$(anterior.AlternativeText, Len("CompostoID=" & id & "|")) <> "CompostoID=" & id & "|" And _
+           Left$(anterior.AlternativeText, Len("IDComposto=" & id & "|")) <> "IDComposto=" & id & "|" Then
             Err.Raise vbObjectError + 716, , "Ja existe um desenho de outra origem com o nome " & nomeShape
         End If
     End If
@@ -157,56 +147,10 @@ Falha:
     On Error GoTo 0
 End Function
 
-Private Function ProcurarImagem(ByVal arquivos As Collection, ByVal fso As Object, _
-    ByVal id As String, ByVal formula As String, ByVal nome As String, _
-    ByRef motivo As String) As String
-    Dim arq As Object, base As String, encontrados As Long, resultado As String
-    Dim chaveNome As String, chaveFormula As String
-    chaveNome = Normalizar(nome)
-    chaveFormula = Normalizar(formula)
-    For Each arq In arquivos
-        base = Normalizar(fso.GetBaseName(arq.Name))
-        If base = chaveNome Or base = chaveFormula Or base = id Then
-            encontrados = encontrados + 1
-            resultado = arq.Path
-        End If
-    Next arq
-    If encontrados = 1 Then
-        ProcurarImagem = resultado
-    ElseIf encontrados = 0 Then
-        motivo = "Arquivo nao encontrado. Use o nome do composto, a formula ou o ID."
-    Else
-        motivo = "Mais de um arquivo corresponde. Deixe uma unica versao desse composto na pasta escolhida."
-    End If
-End Function
-
 Private Function ValidarID(ByVal valor As Variant) As String
-    Dim numero As Double
-    If IsError(valor) Or IsEmpty(valor) Then Err.Raise vbObjectError + 717, , "IDComposto vazio ou com erro."
-    If Not IsNumeric(valor) Then Err.Raise vbObjectError + 718, , "IDComposto deve ser inteiro positivo."
-    numero = CDbl(valor)
-    If numero < 1 Or numero > 2147483647# Or numero <> Fix(numero) Then
-        Err.Raise vbObjectError + 719, , "IDComposto invalido: " & CStr(valor)
-    End If
-    ValidarID = CStr(CLng(numero))
+    ValidarID = CStr(IDPositivo(valor))
 End Function
 
 Private Function Normalizar(ByVal valor As Variant) As String
-    Dim t As String, i As Long, caractere As String, resultado As String
-    If IsError(valor) Then Exit Function
-    t = LCase$(Trim$(CStr(valor)))
-    For i = 224 To 229: t = Replace(t, ChrW(i), "a"): Next i
-    For i = 232 To 235: t = Replace(t, ChrW(i), "e"): Next i
-    For i = 236 To 239: t = Replace(t, ChrW(i), "i"): Next i
-    For i = 242 To 246: t = Replace(t, ChrW(i), "o"): Next i
-    For i = 249 To 252: t = Replace(t, ChrW(i), "u"): Next i
-    t = Replace(t, ChrW(231), "c")
-    For i = 1 To Len(t)
-        caractere = Mid$(t, i, 1)
-        If caractere Like "[a-z0-9]" Then resultado = resultado & caractere
-    Next i
-    ' Alias para as grafias encontradas no arquivo do usuario.
-    If resultado = "acidocloridico" Then resultado = "acidocloridrico"
-    If resultado = "hcio" Then resultado = "hclo"
-    Normalizar = resultado
+    Normalizar = NormalizarNome(valor)
 End Function

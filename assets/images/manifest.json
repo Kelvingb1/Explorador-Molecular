@@ -1,0 +1,112 @@
+{
+  "catalogHash": "b5a5198761fb34d54976319794a2e5de39e09cec74d8e5bab15698bc8d035add",
+  "kind": "USER_IMPORTED",
+  "source": "Lab_EXCEL2Coluna.xlsm: imagens originais, sem recompressao; nao sao geradas do grafo web",
+  "reviewed": false,
+  "files": {
+    "1.jpg": "e5df96fd55677b7d47b3d7a1800cb6f3ff29871f870abbb556746f980a70ee2c",
+    "2.jpg": "c36d2700e0f49e88e27099d837a854b090382539de0482df63417b5ef424a8a8",
+    "3.jpg": "57c53380e095dd787a44f95442a9d5805042c515d8a8eb55fe70ee83fcc9c390",
+    "5.jpg": "b4c83e4736f7abb9568272660b11dc74f3c8ebed60fbe30e02313ac23e0557f9",
+    "7.jpg": "5fa96ebbf05260abbfef264e0017f56588f0236e166a8a68a89bd036fc3f7316",
+    "8.jpg": "fa11627b5d13501c31b1e5adedee3c54e611d552ee5c5e2333a6c928b1787cb9",
+    "9.jpg": "0a583aaa50c278c2171d1d6dd13b682c31a0f0bf6266914228e64f4c48a61ac1",
+    "10.jpg": "1602ba78730af931f231ef60205ae7fd7dfd7ac44d30762047cedefacfde8dc1",
+    "11.jpg": "8377293afcba4d83a922cad6c6d69b39120c4cc175fc702fe68c11cab0911de1",
+    "12.jpg": "dd9973619f178f55b9fe7197331cf56531c7699751cb6e8113f278ea6f4972bf",
+    "13.jpg": "be2fb30eb2db2769ce48caee49ed7601a8bb0f0b76f99131d5f15da252982ec5",
+    "14.jpg": "29c3c9cf5c7ff18cf1763e5ff57fb8b4a73c6ae292c19c5b27577e8304b75432",
+    "15.jpg": "8768b1f43c78b395d78004df16540e7dd5ebc20621b5930faa9a3eec3ca46b84",
+    "16.jpg": "5502f143de994375cc9271ff9134ef5ac1a62167052eeb83ced977ae16bd5147",
+    "17.jpg": "57f0b8c1ffa47f56da4d64c40d3e84d565af44ad6ca43e83cd19ccebfde65f46",
+    "4.jpg": "f5eabf7d89f67095f93b743d222063fc3a449945f048e73180c4d6f8e0c50c81",
+    "6.jpg": "339208ba11b1b01d5247940841a947116277c5d495c224a3b088a9d1e93f1f14"
+  },
+  "origins": {
+    "1": {
+      "member": "xl/media/image1.jpg",
+      "name": "imgCmp_1",
+      "description": "IDComposto=1|Ácido Clorídrico"
+    },
+    "2": {
+      "member": "xl/media/image2.jpg",
+      "name": "imgCmp_2",
+      "description": "IDComposto=2|Ácido Sulfúrico"
+    },
+    "3": {
+      "member": "xl/media/image3.jpg",
+      "name": "imgCmp_3",
+      "description": "IDComposto=3|Hidróxido de Sódio"
+    },
+    "5": {
+      "member": "xl/media/image4.jpg",
+      "name": "imgCmp_5",
+      "description": "IDComposto=5|Amônia"
+    },
+    "7": {
+      "member": "xl/media/image5.jpg",
+      "name": "imgCmp_7",
+      "description": "IDComposto=7|Cloreto de Sódio"
+    },
+    "8": {
+      "member": "xl/media/image6.jpg",
+      "name": "imgCmp_8",
+      "description": "IDComposto=8|Cloreto de Potássio"
+    },
+    "9": {
+      "member": "xl/media/image7.jpg",
+      "name": "imgCmp_9",
+      "description": "IDComposto=9|Hidróxido de Cálcio"
+    },
+    "10": {
+      "member": "xl/media/image8.jpg",
+      "name": "imgCmp_10",
+      "description": "IDComposto=10|Cloreto de Amônio"
+    },
+    "11": {
+      "member": "xl/media/image9.jpg",
+      "name": "imgCmp_11",
+      "description": "IDComposto=11|Ácido Bromídrico"
+    },
+    "12": {
+      "member": "xl/media/image10.jpg",
+      "name": "imgCmp_12",
+      "description": "IDComposto=12|Ácido Iodídrico"
+    },
+    "13": {
+      "member": "xl/media/image11.jpg",
+      "name": "imgCmp_13",
+      "description": "IDComposto=13|Ácido Fluorídrico"
+    },
+    "14": {
+      "member": "xl/media/image12.jpg",
+      "name": "imgCmp_14",
+      "description": "IDComposto=14|Ácido Perclórico"
+    },
+    "15": {
+      "member": "xl/media/image13.jpg",
+      "name": "imgCmp_15",
+      "description": "IDComposto=15|Ácido Carbônico"
+    },
+    "16": {
+      "member": "xl/media/image14.jpg",
+      "name": "imgCmp_16",
+      "description": "IDComposto=16|Ácido Bórico"
+    },
+    "17": {
+      "member": "xl/media/image15.jpg",
+      "name": "imgCmp_17",
+      "description": "IDComposto=17|Ácido Hipocloroso"
+    },
+    "4": {
+      "member": "xl/media/image16.jpg",
+      "name": "imgCmp_4",
+      "description": "IDComposto=4|Ácido Nítrico"
+    },
+    "6": {
+      "member": "xl/media/image17.jpg",
+      "name": "imgCmp_6",
+      "description": "IDComposto=6|Hidróxido de Amônio"
+    }
+  }
+}

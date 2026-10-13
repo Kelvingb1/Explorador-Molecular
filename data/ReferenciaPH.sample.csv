@@ -1,0 +1,18 @@
+﻿IDReferencia,IDComposto,Composto,Concentracao,Temperatura,PH teorico,Metodo,SourceKind,SourceReference,Reviewed
+1,1,Ácido Clorídrico,0.1,25,1,Acido forte monoprotico,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+2,2,Ácido Sulfúrico,0.1,25,0.96,Primeira dissociacao completa; Ka2=1.2e-2,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+3,3,Hidróxido de Sódio,0.1,25,13,Base forte,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+4,4,Ácido Nítrico,0.1,25,1,Acido forte monoprotico,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+5,5,Amônia,0.1,25,11.12,Base fraca; Kb=1.8e-5,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+6,6,Hidróxido de Amônio — amônia aquosa,0.1,25,11.12,Amonia analitica total; Kb=1.8e-5,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+7,7,Cloreto de Sódio,0.1,25,7,Sal sem hidrolise relevante,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+8,8,Cloreto de Potássio,0.1,25,7,Sal sem hidrolise relevante,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+9,9,Hidróxido de Cálcio,0.1,25,,Solubilidade: condicao precisa ser definida,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+10,10,Cloreto de Amônio,0.1,25,5.13,Hidrolise; Ka=Kw/Kb; Kw=1e-14; Kb=1.8e-5,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+11,11,Ácido Bromídrico,0.1,25,1,Acido forte monoprotico,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+12,12,Ácido Iodídrico,0.1,25,1,Acido forte monoprotico,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+13,13,Ácido Fluorídrico,0.1,25,2.11,Acido fraco; Ka=6.4e-4,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+14,14,Ácido Perclórico,0.1,25,1,Acido forte monoprotico,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+15,15,Ácido Carbônico,0.1,25,,Especies carbono: condicao precisa ser definida,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+16,16,Ácido Bórico,0.1,25,5.13,Acido borico; Ka=5.4e-10,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0
+17,17,Ácido Hipocloroso,0.1,25,4.27,Acido fraco; Ka=2.9e-8,CUSTOM_DIDACTIC,"README original do autor; OpenStax Chemistry 2e, secoes 14.2-14.4 e apendices H/I; concentracoes, nao atividades",0

@@ -1,0 +1,8 @@
+Chave,Valor
+SQL_SERVER,localhost\SQLEXPRESS
+DATABASE,ExploradorMolecularTest
+IMAGE_PATH,C:\ExploradorMolecular\assets\images
+SQL_PROVIDER,MSOLEDBSQL19
+SQL_ENCRYPT,Mandatory
+SQL_TRUST_SERVER_CERTIFICATE,False
+WEB_BASE_URL,https://explorador-molecular-cfa.smokycamel65.chatgpt.site

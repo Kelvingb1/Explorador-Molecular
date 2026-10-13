@@ -3,11 +3,6 @@ Option Explicit
 
 Public Sub ImportarLaboratorioSQL()
 
-    Const SERVIDOR As String = "localhost\SQLEXPRESS"
-    Const BANCO As String = "Laboratório"
-    Const pasta As String = _
-        "C:\Users\kelvin\OneDrive\Imagens\Soluções_Reduzidas\"
-
     Dim cn As Object
     Dim imagens As Object
     Dim wsC As Worksheet, wsR As Worksheet, wsA As Worksheet
@@ -15,6 +10,8 @@ Public Sub ImportarLaboratorioSQL()
     Dim transacao As Boolean
     Dim etapa As String, mensagem As String
     Dim observacao As String
+    Dim runID As String, rs As Object, cmdLog As Object
+    Dim resumo As String, erroDescricao As String
     Dim totalC As Long, totalR As Long, totalA As Long
 
     On Error GoTo Falha
@@ -25,11 +22,11 @@ Public Sub ImportarLaboratorioSQL()
 
     etapa = "Conferência dos IDs"
 
+    Application.CalculateFull
+    ValidarCatalogoPlanilha wsC
     ValidarIDs wsC, 1, 3
     ValidarIDs wsR, 1, 2
     ValidarIDs wsA, 2, 3
-
-    Application.CalculateFull
 
     'Carrega todas as imagens antes de iniciar a importação.
     Set imagens = CreateObject("Scripting.Dictionary")
@@ -41,9 +38,7 @@ Public Sub ImportarLaboratorioSQL()
             id = CLng(wsC.Cells(r, "A").Value2)
             etapa = "Imagem do composto ID " & id
 
-            imagens.Add CStr(id), LerImagem( _
-                LocalizarImagem(pasta, id, _
-                CStr(wsC.Cells(r, "C").Value2)))
+            imagens.Add CStr(id), LerImagemComposto(ResolverImagemComposto(wsC, r))
 
         End If
 
@@ -56,10 +51,12 @@ Public Sub ImportarLaboratorioSQL()
     cn.ConnectionTimeout = 15
     cn.CommandTimeout = 60
 
-    cn.Open "Provider=SQLOLEDB;" & _
-            "Data Source=" & SERVIDOR & ";" & _
-            "Initial Catalog=" & BANCO & ";" & _
-            "Integrated Security=SSPI;"
+    cn.Open ConexaoSQL()
+    VerificarSchema cn
+    Set rs = cn.Execute("SELECT CONVERT(varchar(36), NEWID()) AS RunID")
+    runID = CStr(rs.Fields(0).Value)
+    rs.Close
+    cn.Execute "INSERT excel.ImportRun(RunID, Status) VALUES('" & runID & "','RUNNING')"
 
     cn.Execute "SET XACT_ABORT ON;"
     cn.Execute "SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;"
@@ -67,8 +64,8 @@ Public Sub ImportarLaboratorioSQL()
     cn.BeginTrans
     transacao = True
 
-    etapa = "Criação das tabelas"
-    PrepararTabelas cn
+    etapa = "Preparacao do snapshot"
+    PrepararSnapshot cn
 
     '1. COMPOSTOS
     For r = 3 To wsC.Cells(wsC.Rows.Count, "A").End(xlUp).Row
@@ -78,14 +75,16 @@ Public Sub ImportarLaboratorioSQL()
             id = CLng(wsC.Cells(r, "A").Value2)
             etapa = "Compostos, linha " & r
 
-            GravarRegistro cn, "[excel].[Compostos]", _
+            GravarRegistro cn, "#FonteCompostos", _
                 Array("IDComposto", "Formula", "Nomenclatura", _
-                      "Estrutura", "MassaMolar"), _
+                      "Estrutura", "MassaMolar", "CodigoExplorador", _
+                      "ImagemArquivo", "CatalogHash"), _
                 Array(id, wsC.Cells(r, "B").Value2, _
                       wsC.Cells(r, "C").Value2, _
                       imagens(CStr(id)), _
-                      NumeroSQL(wsC.Cells(r, "E").Value2)), _
-                Array(3, 202, 202, 205, 5)
+                      NumeroSQL(wsC.Cells(r, "E").Value2), _
+                      wsC.Cells(r, "F").Value2, wsC.Cells(r, "G").Value2, CATALOGO_HASH), _
+                Array(3, 202, 202, 205, 131, 202, 202, 202)
 
             totalC = totalC + 1
 
@@ -101,22 +100,25 @@ Public Sub ImportarLaboratorioSQL()
             etapa = "ReferênciaPH, linha " & r
             observacao = ""
 
+            If IsError(wsR.Cells(r, "F").Value2) Then Err.Raise vbObjectError + 836, , "Erro de formula no PH teorico. Linha " & r
             If Not IsNumeric(wsR.Cells(r, "F").Value2) Then
                 observacao = CStr(wsR.Cells(r, "F").Value2)
             End If
 
-            GravarRegistro cn, "[excel].[ReferenciaPH]", _
+            GravarRegistro cn, "#FonteReferenciaPH", _
                 Array("IDReferencia", "IDComposto", "Composto", _
                       "Concentracao", "Temperatura", "PH teorico", _
-                      "Metodo", "Condicao"), _
+                      "Metodo", "Condicao", "SourceKind", "SourceReference", "Reviewed"), _
                 Array(CLng(wsR.Cells(r, "A").Value2), _
                       IDValido(wsR.Cells(r, "B").Value2), _
                       wsR.Cells(r, "C").Value2, _
                       NumeroSQL(wsR.Cells(r, "D").Value2), _
                       NumeroSQL(wsR.Cells(r, "E").Value2), _
                       NumeroSQL(wsR.Cells(r, "F").Value2), _
-                      wsR.Cells(r, "G").Value2, observacao), _
-                Array(3, 3, 202, 5, 5, 5, 202, 202)
+                      wsR.Cells(r, "G").Value2, observacao, _
+                      wsR.Cells(r, "H").Value2, wsR.Cells(r, "I").Value2, _
+                      RevisadoValido(wsR.Cells(r, "J").Value2)), _
+                Array(3, 3, 202, 131, 131, 131, 202, 202, 202, 202, 11)
 
             totalR = totalR + 1
 
@@ -135,7 +137,7 @@ Public Sub ImportarLaboratorioSQL()
                 Err.Raise vbObjectError + 100, , "Data inválida."
             End If
 
-            GravarRegistro cn, "[excel].[Analises]", _
+            GravarRegistro cn, "#FonteAnalises", _
                 Array("IDAnalise", "DataAnalise", "Lote", _
                       "IDComposto", "Nomenclatura", "IDReferencia", _
                       "Concentracao", "Temperatura", "PHMedido", _
@@ -154,8 +156,8 @@ Public Sub ImportarLaboratorioSQL()
                       NumeroSQL(wsA.Cells(r, "K").Value2), _
                       NumeroSQL(wsA.Cells(r, "L").Value2), _
                       wsA.Cells(r, "M").Value2), _
-                Array(3, 133, 202, 3, 202, 3, 5, 5, 5, _
-                      202, 5, 5, 202)
+                Array(3, 133, 202, 3, 202, 3, 131, 131, 131, _
+                      202, 131, 131, 202)
 
             totalA = totalA + 1
 
@@ -163,6 +165,16 @@ Public Sub ImportarLaboratorioSQL()
 
     Next r
 
+    etapa = "Validacao e reconciliacao"
+    cn.Execute "EXEC excel.ReconciliarImportacao @RunID='" & runID & "'"
+    Set rs = cn.Execute("SELECT Inserted, Updated, Deactivated, Reconciled, Status FROM excel.ImportRun WHERE RunID='" & runID & "'")
+    If rs.EOF Then Err.Raise vbObjectError + 830, , "Resultado da importacao ausente."
+    If Not CBool(rs.Fields("Reconciled").Value) Or rs.Fields("Status").Value <> "SUCCESS" Then _
+        Err.Raise vbObjectError + 831, , "Snapshot nao reconciliado."
+    resumo = "Inseridos: " & rs.Fields("Inserted").Value & vbCrLf & _
+             "Atualizados/reativados: " & rs.Fields("Updated").Value & vbCrLf & _
+             "Inativados: " & rs.Fields("Deactivated").Value
+    rs.Close
     cn.CommitTrans
     transacao = False
     cn.Close
@@ -170,7 +182,7 @@ Public Sub ImportarLaboratorioSQL()
     MsgBox "Importação concluída!" & vbCrLf & vbCrLf & _
            "Compostos: " & totalC & vbCrLf & _
            "Referências: " & totalR & vbCrLf & _
-           "Análises: " & totalA, vbInformation
+           "Análises: " & totalA & vbCrLf & resumo & vbCrLf & "Execucao: " & runID, vbInformation
 
     Exit Sub
 
@@ -178,11 +190,22 @@ Falha:
     mensagem = "Etapa: " & etapa & vbCrLf & _
                "Erro " & Err.Number & ": " & Err.Description
 
+    erroDescricao = mensagem
     On Error Resume Next
 
     If Not cn Is Nothing Then
         If transacao Then cn.RollbackTrans
-        If cn.State <> 0 Then cn.Close
+        If cn.State <> 0 Then
+            If runID <> "" Then
+                Set cmdLog = CreateObject("ADODB.Command")
+                Set cmdLog.ActiveConnection = cn
+                cmdLog.CommandType = 1
+                cmdLog.CommandText = "UPDATE excel.ImportRun SET FinishedAt=SYSUTCDATETIME(), Status='FAILED', Rejected=NULL, ErrorMessage=? WHERE RunID='" & runID & "'"
+                AdicionarParametro cmdLog, 202, Left$(erroDescricao, 2000), "ErrorMessage"
+                cmdLog.Execute , , 128
+            End If
+            cn.Close
+        End If
     End If
 
     On Error GoTo 0
@@ -193,58 +216,22 @@ Falha:
 End Sub
 
 
-Private Sub PrepararTabelas(ByVal cn As Object)
-
-    cn.Execute _
-        "IF SCHEMA_ID(N'excel') IS NULL " & _
-        "EXEC(N'CREATE SCHEMA excel');"
-
-    cn.Execute _
-        "IF OBJECT_ID(N'excel.Compostos', N'U') IS NULL " & _
-        "CREATE TABLE [excel].[Compostos] (" & _
-        "[IDComposto] int NOT NULL PRIMARY KEY," & _
-        "[Formula] nvarchar(30) NOT NULL," & _
-        "[Nomenclatura] nvarchar(100) NOT NULL," & _
-        "[Estrutura] varbinary(max) NOT NULL," & _
-        "[MassaMolar] decimal(10,3) NULL);"
-
-    cn.Execute _
-        "IF OBJECT_ID(N'excel.ReferenciaPH', N'U') IS NULL " & _
-        "CREATE TABLE [excel].[ReferenciaPH] (" & _
-        "[IDReferencia] int NOT NULL PRIMARY KEY," & _
-        "[IDComposto] int NOT NULL," & _
-        "[Composto] nvarchar(100) NOT NULL," & _
-        "[Concentracao] decimal(18,6) NULL," & _
-        "[Temperatura] decimal(10,3) NULL," & _
-        "[PH teorico] decimal(8,3) NULL," & _
-        "[Metodo] nvarchar(200) NULL," & _
-        "[Condicao] nvarchar(200) NULL," & _
-        "UNIQUE ([IDReferencia], [IDComposto])," & _
-        "FOREIGN KEY ([IDComposto]) " & _
-        "REFERENCES [excel].[Compostos]([IDComposto]));"
-
-    cn.Execute _
-        "IF OBJECT_ID(N'excel.Analises', N'U') IS NULL " & _
-        "CREATE TABLE [excel].[Analises] (" & _
-        "[IDAnalise] int NOT NULL PRIMARY KEY," & _
-        "[DataAnalise] date NOT NULL," & _
-        "[Lote] nvarchar(30) NULL," & _
-        "[IDComposto] int NOT NULL," & _
-        "[Nomenclatura] nvarchar(100) NULL," & _
-        "[IDReferencia] int NOT NULL," & _
-        "[Concentracao] decimal(18,6) NULL," & _
-        "[Temperatura] decimal(10,3) NULL," & _
-        "[PHMedido] decimal(8,3) NULL," & _
-        "[ReferenciaAplicavel] nvarchar(100) NULL," & _
-        "[PHTeorico] decimal(8,3) NULL," & _
-        "[DiferencaPH] decimal(8,3) NULL," & _
-        "[Status] nvarchar(100) NULL," & _
-        "FOREIGN KEY ([IDReferencia], [IDComposto]) " & _
-        "REFERENCES [excel].[ReferenciaPH]" & _
-        "([IDReferencia], [IDComposto]));"
-
+Private Sub VerificarSchema(ByVal cn As Object)
+    Dim rs As Object
+    Set rs = cn.Execute("SELECT CASE WHEN OBJECT_ID('dbo.SchemaVersion') IS NULL THEN 0 ELSE 1 END")
+    If rs.Fields(0).Value = 0 Then Err.Raise vbObjectError + 832, , "Execute sql/Modelagem_Dados_SQL.sql antes da macro."
+    rs.Close
+    Set rs = cn.Execute("SELECT MAX(Version) FROM dbo.SchemaVersion")
+    If IsNull(rs.Fields(0).Value) Then Err.Raise vbObjectError + 833, , "Schema sem versao."
+    If CLng(rs.Fields(0).Value) <> 3 Then Err.Raise vbObjectError + 834, , "Schema esperado: versao 3. Aplique migrations."
+    rs.Close
 End Sub
 
+Private Sub PrepararSnapshot(ByVal cn As Object)
+    cn.Execute "SELECT TOP (0) IDComposto, Formula, Nomenclatura, Estrutura, MassaMolar, CodigoExplorador, ImagemArquivo, CatalogHash INTO #FonteCompostos FROM excel.Compostos"
+    cn.Execute "SELECT TOP (0) IDReferencia, IDComposto, Composto, Concentracao, Temperatura, [PH teorico], Metodo, Condicao, SourceKind, SourceReference, Reviewed INTO #FonteReferenciaPH FROM excel.ReferenciaPH"
+    cn.Execute "SELECT TOP (0) IDAnalise, DataAnalise, Lote, IDComposto, Nomenclatura, IDReferencia, Concentracao, Temperatura, PHMedido, ReferenciaAplicavel, PHTeorico, DiferencaPH, Status INTO #FonteAnalises FROM excel.Analises"
+End Sub
 
 Private Sub GravarRegistro(ByVal cn As Object, _
                            ByVal tabela As String, _
@@ -280,7 +267,7 @@ Private Sub GravarRegistro(ByVal cn As Object, _
             If i > 1 Then sql = sql & ","
 
             sql = sql & "[" & campos(i) & "]=?"
-            AdicionarParametro cmd, CLng(tipos(i)), valores(i)
+            AdicionarParametro cmd, CLng(tipos(i)), valores(i), CStr(campos(i))
 
         Next i
 
@@ -299,7 +286,7 @@ Private Sub GravarRegistro(ByVal cn As Object, _
             colunas = colunas & "[" & campos(i) & "]"
             marcas = marcas & "?"
 
-            AdicionarParametro cmd, CLng(tipos(i)), valores(i)
+            AdicionarParametro cmd, CLng(tipos(i)), valores(i), CStr(campos(i))
 
         Next i
 
@@ -316,7 +303,8 @@ End Sub
 
 Private Sub AdicionarParametro(ByVal cmd As Object, _
                                ByVal tipo As Long, _
-                               ByVal valor As Variant)
+                               ByVal valor As Variant, _
+                               Optional ByVal campo As String = "")
 
     Dim p As Object
     Dim tamanho As Long
@@ -344,7 +332,20 @@ Private Sub AdicionarParametro(ByVal cmd As Object, _
             Set p = cmd.CreateParameter( _
                 nome, tipo, 1, tamanho, valor)
 
-        Case Else  'Inteiro, número ou data
+        Case 131  'adNumeric: contrato DECIMAL do schema
+            Set p = cmd.CreateParameter(nome, tipo, 1)
+            Select Case campo
+                Case "Concentracao": p.Precision = 18: p.NumericScale = 6
+                Case "MassaMolar", "Temperatura": p.Precision = 10: p.NumericScale = 3
+                Case Else: p.Precision = 8: p.NumericScale = 3
+            End Select
+            If IsNull(valor) Then
+                p.Value = Null
+            Else
+                p.Value = CDec(valor)
+            End If
+
+        Case Else  'Inteiro, numero ou data
             Set p = cmd.CreateParameter(nome, tipo, 1)
             p.Value = valor
 
@@ -367,12 +368,12 @@ Private Function NumeroSQL(ByVal valor As Variant) As Variant
     texto = Trim$(CStr(valor))
 
     If texto <> "" And IsNumeric(valor) Then
-        NumeroSQL = CDbl(valor)
+        NumeroSQL = CDec(valor)
         Exit Function
     End If
 
     texto = Replace(texto, """", "")
-    texto = Trim$(Replace(texto, "-", ""))
+    texto = Trim$(texto)
 
     Select Case LCase$(texto)
 
@@ -390,22 +391,8 @@ End Function
 
 
 Private Function IDValido(ByVal valor As Variant) As Long
-
-    If IsError(valor) Then GoTo Invalido
-    If Not IsNumeric(valor) Then GoTo Invalido
-    If CDbl(valor) < 1 Then GoTo Invalido
-    If CDbl(valor) > 2147483647# Then GoTo Invalido
-    If CDbl(valor) <> Fix(CDbl(valor)) Then GoTo Invalido
-
-    IDValido = CLng(valor)
-    Exit Function
-
-Invalido:
-    Err.Raise vbObjectError + 104, , _
-              "O ID deve ser um número inteiro positivo."
-
+    IDValido = IDPositivo(valor)
 End Function
-
 
 Private Sub ValidarIDs(ByVal ws As Worksheet, _
                        ByVal coluna As Long, _
@@ -416,14 +403,16 @@ Private Sub ValidarIDs(ByVal ws As Worksheet, _
 
     Set vistos = CreateObject("Scripting.Dictionary")
 
-    For r = primeiraLinha To _
-        ws.Cells(ws.Rows.Count, coluna).End(xlUp).Row
+    For r = primeiraLinha To UltimaLinhaDados(ws)
 
         If IsError(ws.Cells(r, coluna).Value2) Then
             Err.Raise vbObjectError + 105, , _
                       "Erro no ID: " & ws.Name & ", linha " & r
         End If
 
+        If Len(Trim$(CStr(ws.Cells(r, coluna).Value2))) = 0 And Application.CountA(ws.Rows(r)) > 0 Then
+            Err.Raise vbObjectError + 835, , "Linha com dados e sem ID: " & ws.Name & ", linha " & r
+        End If
         If Len(Trim$(CStr(ws.Cells(r, coluna).Value2))) > 0 Then
 
             id = IDValido(ws.Cells(r, coluna).Value2)
@@ -442,85 +431,14 @@ Private Sub ValidarIDs(ByVal ws As Worksheet, _
 End Sub
 
 
-Private Function LocalizarImagem(ByVal pasta As String, _
-                                 ByVal id As Long, _
-                                 ByVal nomenclatura As String) As String
 
-    Dim caminho As String
-    Dim extensao As Variant
-    Dim nomes As Variant, nome As Variant
-    Dim escolha As Variant
-
-    Select Case id
-
-        Case 4
-            nomes = Array("Acido_Nitrico")
-
-        Case 6
-            nomes = Array("Hidroxido_de_Amonio")
-
-        Case 1
-            nomes = Array(nomenclatura, "Ácido Clorídico")
-
-        Case 2
-            nomes = Array(nomenclatura, _
-                          "Ácido Sulfurico", "Ácido Súlfurico")
-
-        Case Else
-            nomes = Array(nomenclatura)
-
-    End Select
-
-    For Each nome In nomes
-
-        For Each extensao In Array(".jpg", ".jpeg", ".png")
-
-            caminho = pasta & CStr(nome) & CStr(extensao)
-
-            If Dir(caminho) <> "" Then
-                LocalizarImagem = caminho
-                Exit Function
-            End If
-
-        Next extensao
-
-    Next nome
-
-    'Se o nome do arquivo for diferente, permite selecioná-lo.
-    escolha = Application.GetOpenFilename( _
-        FileFilter:="Imagens (*.jpg;*.jpeg;*.png),*.jpg;*.jpeg;*.png", _
-        Title:="Selecione a imagem reduzida: " & nomenclatura)
-
-    If VarType(escolha) = vbBoolean Then
-        Err.Raise vbObjectError + 107, , _
-                  "Seleção da imagem cancelada: " & nomenclatura
+Private Function RevisadoValido(ByVal valor As Variant) As Boolean
+    If VarType(valor) = vbBoolean Then
+        RevisadoValido = CBool(valor)
+    ElseIf IsNumeric(valor) Then
+        If CDbl(valor) <> 0 And CDbl(valor) <> 1 Then Err.Raise vbObjectError + 837, , "Reviewed deve ser 0 ou 1."
+        RevisadoValido = (CDbl(valor) = 1)
+    Else
+        Err.Raise vbObjectError + 838, , "Reviewed deve ser booleano ou 0/1."
     End If
-
-    LocalizarImagem = CStr(escolha)
-
 End Function
-
-
-Private Function LerImagem(ByVal caminho As String) As Variant
-
-    Dim fluxo As Object
-
-    Set fluxo = CreateObject("ADODB.Stream")
-
-    fluxo.Type = 1
-    fluxo.Open
-    fluxo.LoadFromFile caminho
-
-    If fluxo.Size = 0 Then
-        fluxo.Close
-        Err.Raise vbObjectError + 108, , _
-                  "Arquivo de imagem vazio: " & caminho
-    End If
-
-    LerImagem = fluxo.Read
-    fluxo.Close
-
-End Function
-    
-
-

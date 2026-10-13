@@ -200,3 +200,27 @@ button:focus-visible,
         transition: none;
     }
 }
+/* Painel 2D */
+
+            #painel-estrutura-2d { grid-column: 1 / -1; }
+            #painel-estrutura-2d .cabecalho-2d { display:flex; flex-wrap:wrap;
+                justify-content:space-between; align-items:center; gap:12px; }
+            #painel-estrutura-2d h2 { margin:0; }
+            #painel-estrutura-2d .composto-2d { color:#c5d5ed; margin:0; }
+            #painel-estrutura-2d .moldura-2d { margin:18px 0; border:1px solid #354766;
+                border-radius:14px; background:#0b1220; overflow:hidden; }
+            #painel-estrutura-2d svg { display:block; width:100%; max-width:800px;
+                height:auto; margin:auto; font-family:'Segoe UI',Arial,sans-serif; }
+            #painel-estrutura-2d .atomo-2d { cursor:pointer; outline:none; }
+            #painel-estrutura-2d .alvo-2d { fill:#0b1220; stroke:transparent; stroke-width:3; }
+            #painel-estrutura-2d .atomo-2d:hover .alvo-2d { stroke:#8bcaff; }
+            #painel-estrutura-2d .atomo-2d[aria-pressed="true"] .alvo-2d {
+                stroke:#f8fafc; fill:#233c59; }
+            #painel-estrutura-2d .atomo-2d:focus-visible .alvo-2d {
+                stroke:#fde68a; stroke-dasharray:5 3; }
+            #painel-estrutura-2d .detalhe-2d { min-height:3em; padding:14px 16px;
+                border:1px solid #405577; border-radius:10px; background:#15243b; color:#f1f5ff; }
+            #painel-estrutura-2d .nota-2d { font-size:14px; margin-bottom:0; }
+            #massa-molar-complemento { font-weight:700; color:#bfe0ff; }
+        
+button:disabled { opacity: .5; cursor: default; }
