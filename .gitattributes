@@ -1,0 +1,9 @@
+* text=auto eol=lf
+data/Compostos.csv text eol=crlf
+vba/*.bas text eol=crlf
+vba/windows-1252/*.bas text eol=crlf
+*.pbix -text
+*.xlsm -text
+*.jpg -text
+*.png -text
+*.gif -text
