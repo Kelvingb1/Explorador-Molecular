@@ -13,9 +13,9 @@ O site é público e pode ser acessado sem conta no ChatGPT. O relatório Power 
 <!-- cfa-video -->
 ## Conheça o projeto em vídeo
 
-[![Visão geral em vídeo do Explorador Molecular CFA](assets/cfa-video-capa.jpg)](https://github.com/Kelvingb1/Explorador-Molecular/raw/refs/heads/main/assets/videos/Explorador_Molecular.mp4)
+[![Visão geral em vídeo do Explorador Molecular CFA](assets/cfa-video-capa.jpg)](https://explorador-molecular-cfa.smokycamel65.chatgpt.site/video.html)
 
-[**Abrir ou baixar o vídeo (MP4 · 6 min 12 s)**](https://github.com/Kelvingb1/Explorador-Molecular/raw/refs/heads/main/assets/videos/Explorador_Molecular.mp4)
+[**Assistir ao vídeo (6 min 12 s)**](https://explorador-molecular-cfa.smokycamel65.chatgpt.site/video.html)
 
 Uma visão geral da integração entre Excel/VBA, SQL Server, Power BI e o explorador molecular.
 <!-- /cfa-video -->
