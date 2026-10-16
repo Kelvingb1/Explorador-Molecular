@@ -10,6 +10,26 @@ O site é público e pode ser acessado sem conta no ChatGPT. O relatório Power 
 
 ![Demonstração do Explorador Molecular](assets/demo.gif)
 
+<!-- cfa-video -->
+## Conheça o projeto em vídeo
+
+[![Visão geral em vídeo do Explorador Molecular CFA](assets/cfa-video-capa.jpg)](https://github.com/Kelvingb1/Explorador-Molecular/raw/refs/heads/main/assets/videos/Explorador_Molecular.mp4)
+
+[**Abrir ou baixar o vídeo (MP4 · 6 min 12 s)**](https://github.com/Kelvingb1/Explorador-Molecular/raw/refs/heads/main/assets/videos/Explorador_Molecular.mp4)
+
+Uma visão geral da integração entre Excel/VBA, SQL Server, Power BI e o explorador molecular.
+<!-- /cfa-video -->
+
+<!-- cfa-visao-geral -->
+## Visão geral em PDF
+
+[![Visão geral do Explorador Molecular CFA](assets/cfa-visao-geral.png)](docs/apresentacoes/Explorador_Molecular_CFA.pdf)
+
+[**Ler a visão geral do projeto (PDF)**](docs/apresentacoes/Explorador_Molecular_CFA.pdf)
+
+Conheça a arquitetura, a integração entre as ferramentas e os limites dos exemplos químicos em 15 páginas.
+<!-- /cfa-visao-geral -->
+
 Este é um projeto que criei para conectar quatro coisas que eu queria aprender ao mesmo tempo: modelagem de dados relacionais, automação com VBA, análise em Power BI e front-end interativo com renderização 3D. Em vez de fazer quatro exercícios separados, decidi fazer um projeto só onde o mesmo dado atravessa as quatro ferramentas — um cadastro de compostos químicos e análises simuladas que nasce no Excel, passa pelo SQL Server, vira relatório no Power BI e termina como um explorador molecular interativo no navegador.
 
 **Os dados de pH medido são simulados, para fins de estudo — não são medições de laboratório.** Os modelos moleculares são didáticos, e a revisão química completa ainda está em andamento.
